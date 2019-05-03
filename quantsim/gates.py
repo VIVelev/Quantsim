@@ -6,6 +6,8 @@ __all__ = [
     'BaseGate',
     'XGate',
     'HGate',
+    'IGate',
+    'ZGate',
 ]
 
 
@@ -23,10 +25,17 @@ class BaseGate(ABC):
 class XGate(BaseGate):
     """X (Not) Gate"""
 
+    X_matrix = np.array([[0, 1], [1, 0]])
+
     @staticmethod
     def apply(qubit):
-        qubit.zero, qubit.one = qubit.one, qubit.zero
-        return np.array([[qubit.zero, qubit.one]])
+        vec = np.array([[qubit.zero],[qubit.one]])
+        vec = XGate.X_matrix @ vec
+
+        qubit.zero = vec[0][0]
+        qubit.one = vec[1][0]
+
+        return vec
 
     @staticmethod
     def reverse(qubit):
@@ -51,3 +60,43 @@ class HGate(BaseGate):
     @staticmethod
     def reverse(qubit):
         return HGate.apply(qubit)
+
+
+class IGate(BaseGate):
+    """Identity Gate"""
+
+    I_matrix = np.array([[1, 0], [0, 1]])
+
+    @staticmethod
+    def apply(qubit):
+        vec = np.array([[qubit.zero],[qubit.one]])
+        vec = IGate.I_matrix @ vec
+
+        qubit.zero = vec[0][0]
+        qubit.one = vec[1][0]
+
+        return vec
+
+    @staticmethod
+    def reverse(qubit):
+        return IGate.apply(qubit)
+
+
+class ZGate(BaseGate):
+    """Phase-flip Gate"""
+
+    Z_matrix = np.array([[1, 0], [0, -1]])
+
+    @staticmethod
+    def apply(qubit):
+        vec = np.array([[qubit.zero],[qubit.one]])
+        vec = ZGate.Z_matrix @ vec
+
+        qubit.zero = vec[0][0]
+        qubit.one = vec[1][0]
+
+        return vec
+
+    @staticmethod
+    def reverse(qubit):
+        return ZGate.apply(qubit)
