@@ -1,4 +1,4 @@
-from abc import ABC, abstractstaticmethod
+from abc import abstractstaticmethod
 
 import numpy as np
 

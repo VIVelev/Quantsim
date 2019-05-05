@@ -12,13 +12,22 @@ class QuantumMachine:
         self.name = name
 
         self.qubits = []
+
+    def __enter__(self):
         self._init_qubits()
+        return self
+
+    def __exit__(self, exception_type, exception_value, traceback):
+        del self.qubits
 
     def _init_qubits(self):
         self.qubits = [Qubit() for _ in range(self.num_qubits)]
 
-    def get_qubit(self, idx):
-        return self.qubits[idx]
+    def get_qubit(self, idx=None):
+        if idx != None:
+            return self.qubits[idx]
+        else:
+            return self.qubits[self.num_qubits-1]
 
     def set_qubit(self, idx, qubit):
         self.qubits[idx] = qubit
