@@ -24,6 +24,9 @@ __all__ = [
     'Rz',
     'Measurement',
     'M',
+
+    'CNOTGate',
+    'CNOT',
 ]
 
 
@@ -53,11 +56,9 @@ class IGate(BaseGate):
         qubit.zero = vec[0][0]
         qubit.one = vec[1][0]
 
-        return vec
-
     @staticmethod
     def reverse(qubit):
-        return IGate.apply(qubit)
+        IGate.apply(qubit)
 
 I = IGate()
 
@@ -76,11 +77,9 @@ class XGate(BaseGate):
         qubit.zero = vec[0][0]
         qubit.one = vec[1][0]
 
-        return vec
-
     @staticmethod
     def reverse(qubit):
-        return XGate.apply(qubit)
+        XGate.apply(qubit)
 
 X = XGate()
 
@@ -99,11 +98,9 @@ class HGate(BaseGate):
         qubit.zero = vec[0][0]
         qubit.one = vec[1][0]
 
-        return vec
-
     @staticmethod
     def reverse(qubit):
-        return HGate.apply(qubit)
+        HGate.apply(qubit)
 
 H = HGate()
 
@@ -122,11 +119,9 @@ class ZGate(BaseGate):
         qubit.zero = vec[0][0]
         qubit.one = vec[1][0]
 
-        return vec
-
     @staticmethod
     def reverse(qubit):
-        return ZGate.apply(qubit)
+        ZGate.apply(qubit)
 
 Z = ZGate()
 
@@ -145,11 +140,9 @@ class SGate(BaseGate):
         qubit.zero = vec[0][0]
         qubit.one = vec[1][0]
 
-        return vec
-
     @staticmethod
     def reverse(qubit):
-        return ZGate.reverse(SGate.apply(qubit))
+        ZGate.reverse(SGate.apply(qubit))
 
 S = SGate()
 
@@ -168,11 +161,9 @@ class TGate(BaseGate):
         qubit.zero = vec[0][0]
         qubit.one = vec[1][0]
 
-        return vec
-
     @staticmethod
     def reverse(qubit):
-        return SGate.reverse(TGate.apply)
+        SGate.reverse(TGate.apply)
 
 T = TGate()
 
@@ -191,11 +182,9 @@ class R8Gate(BaseGate):
         qubit.zero = vec[0][0]
         qubit.one = vec[1][0]
 
-        return vec
-
     @staticmethod
     def reverse(qubit):
-        return TGate.reverse(R8Gate.apply)
+        TGate.reverse(R8Gate.apply)
 
 R8 = R8Gate()
 
@@ -227,12 +216,10 @@ class RxGate(BaseGate):
         qubit.zero = vec[0][0]
         qubit.one = vec[1][0]
 
-        return vec
-
     @staticmethod
     def reverse(qubit):
         RxGate.theta = 360 - RxGate.theta
-        return RxGate.apply(qubit)
+        RxGate.apply(qubit)
 
 Rx = RxGate()
 
@@ -264,12 +251,10 @@ class RzGate(BaseGate):
         qubit.zero = vec[0][0]
         qubit.one = vec[1][0]
 
-        return vec
-
     @staticmethod
     def reverse(qubit):
         RzGate.phi = 360 - RzGate.phi
-        return RzGate.apply(qubit)
+        RzGate.apply(qubit)
 
 Rz = RzGate()
 
@@ -288,5 +273,24 @@ class Measurement(BaseGate):
         pass
 
 M = Measurement()
+
+# ====================================================================================================
+
+class CNOTGate(BaseGate):
+
+    @staticmethod
+    def apply(q1, q2):
+        q1.measure()
+
+        if q1.one == complex(1):
+            q2.X()
+        else:
+            pass
+
+    @staticmethod
+    def reverse(q1, q2):
+        CNOTGate.apply(q1, q2)
+
+CNOT = CNOTGate()
 
 # ====================================================================================================

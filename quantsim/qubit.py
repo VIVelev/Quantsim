@@ -3,6 +3,7 @@ from .gates import *
 
 __all__ = [
     'Qubit',
+    'Entanglement',
 ]
 
 
@@ -18,8 +19,14 @@ class Qubit:
         return self.zero == other.zero and self.one == other.one
 
     def __sub__(self, gate):
+        assert isinstance(gate, BaseGate)
+
         gate.apply(self)
         return self
+
+    def __matmul__(self, other_qubit):
+        assert isinstance(other_qubit, Qubit)
+        return Entanglement(self, other_qubit)
 
     def identity(self):
         IGate.apply(self)
@@ -75,3 +82,24 @@ class Qubit:
     def display(self):
         print(self.__repr__())
         return self
+
+class Entanglement:
+    def __init__(self, *qubits):
+        self.qubits = qubits
+
+    def __repr__(self):
+        pass
+
+    def __sub__(self, gate):
+        assert isinstance(gate, BaseGate) 
+
+        gate.apply(self.qubits[0], self.qubits[1])
+        return self
+
+    def __matmul__(self, other):
+        if type(other) is Qubit:
+            self.qubits.append(other)
+        elif type(other) is Entanglement:
+            self.qubits += other.qubits
+        else:
+            raise TypeError
