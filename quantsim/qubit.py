@@ -48,6 +48,14 @@ class Qubit:
     def R8(self):
         R8Gate.apply(self)
         return self
+    
+    def Rx(self, theta):
+        Rx(theta).apply(self)
+        return self
+    
+    def Rz(self, phi):
+        Rz(phi).apply(self)
+        return self
 
     def measure(self):
         """Measure the qubit in the computational basis"""
