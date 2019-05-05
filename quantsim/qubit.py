@@ -17,6 +17,10 @@ class Qubit:
     def __eq__(self, other):
         return self.zero == other.zero and self.one == other.one
 
+    def __sub__(self, gate):
+        gate.apply(self)
+        return self
+
     def identity(self):
         IGate.apply(self)
         return self

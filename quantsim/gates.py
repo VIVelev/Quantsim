@@ -5,18 +5,27 @@ import numpy as np
 __all__ = [
     'BaseGate',
     'IGate',
+    'I',
     'XGate',
+    'X',
     'HGate',
+    'H',
     'ZGate',
+    'Z',
     'SGate',
+    'S',
     'TGate',
+    'T',
     'R8Gate',
-    'RxGate',
-    'RzGate',
+    'R8',
+    'Measurement',
+    'M',
+    # 'RxGate',
+    # 'RzGate',
 ]
 
 
-class BaseGate(ABC):
+class BaseGate():
 
     @abstractstaticmethod
     def apply(*qubits):
@@ -48,6 +57,8 @@ class IGate(BaseGate):
     def reverse(qubit):
         return IGate.apply(qubit)
 
+I = IGate()
+
 # ====================================================================================================
 
 class XGate(BaseGate):
@@ -68,6 +79,8 @@ class XGate(BaseGate):
     @staticmethod
     def reverse(qubit):
         return XGate.apply(qubit)
+
+X = XGate()
 
 # ====================================================================================================
 
@@ -90,6 +103,8 @@ class HGate(BaseGate):
     def reverse(qubit):
         return HGate.apply(qubit)
 
+H = HGate()
+
 # ====================================================================================================
 
 class ZGate(BaseGate):
@@ -111,12 +126,14 @@ class ZGate(BaseGate):
     def reverse(qubit):
         return ZGate.apply(qubit)
 
+Z = ZGate()
+
 # ====================================================================================================
 
 class SGate(BaseGate):
     """90 Phase-flip Gate"""
 
-    S_matrix = np.sqrt(ZGate.Z_matrix)
+    S_matrix = np.sqrt(np.vectorize(complex)(ZGate.Z_matrix))
 
     @staticmethod
     def apply(qubit):
@@ -131,6 +148,8 @@ class SGate(BaseGate):
     @staticmethod
     def reverse(qubit):
         return ZGate.reverse(SGate.apply(qubit))
+
+S = SGate()
 
 # ====================================================================================================
 
@@ -153,6 +172,8 @@ class TGate(BaseGate):
     def reverse(qubit):
         return SGate.reverse(TGate.apply)
 
+T = TGate()
+
 # ====================================================================================================
 
 class R8Gate(BaseGate):
@@ -173,5 +194,23 @@ class R8Gate(BaseGate):
     @staticmethod
     def reverse(qubit):
         return TGate.reverse(R8Gate.apply)
+
+R8 = R8Gate()
+
+# ====================================================================================================
+
+class Measurement(BaseGate):
+    """Measurement"""
+
+    @staticmethod
+    def apply(qubit):
+        qubit.measure()
+        qubit.display()
+
+    @staticmethod
+    def reverse(qubit):
+        pass
+
+M = Measurement()
 
 # ====================================================================================================
