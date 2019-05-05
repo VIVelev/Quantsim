@@ -1,7 +1,7 @@
 # Quantsim
 Quantum Computing Simulation in Python 
 
-## Simple Random Qubit generator program
+### Simple Random Qubit Generator program
 ```python
 from quantsim import QuantumMachine
 from quantsim.gates import H, M
