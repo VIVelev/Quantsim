@@ -70,12 +70,10 @@ class Qubit:
         if np.random.rand() < abs(self.zero) ** 2:
             self.zero = complex(1)
             self.one  = complex(0)
-            return 0
 
         else:
             self.zero = complex(0)
             self.one  = complex(1)
-            return 1
 
         return self
     
@@ -84,22 +82,28 @@ class Qubit:
         return self
 
 class Entanglement:
-    def __init__(self, *qubits):
-        self.qubits = qubits
+    def __init__(self, q1, q2, control_qubit=0):
+        self.q1 = q1
+        self.q2 = q2
+        self.control_qubit = control_qubit
 
     def __repr__(self):
-        pass
+        prob = [
+            [self.q1.zero * self.q2.zero, self.q1.zero * self.q2.one],
+            [self.q1.one * self.q2.zero, self.q1.one * self.q2.one]
+        ]
+
+        return str(prob[0][0]) + '|00> + ' + str(prob[0][1]) + '|01> + ' + str(prob[1][0]) + '|10> + ' + str(prob[1][1]) + '|11>\n'
 
     def __sub__(self, gate):
         assert isinstance(gate, BaseGate) 
 
-        gate.apply(self.qubits[0], self.qubits[1])
+        gate.apply(
+            self.q1 if self.control_qubit else self.q2,
+            self.q1 if self.control_qubit else self.q2,
+        )
         return self
 
-    def __matmul__(self, other):
-        if type(other) is Qubit:
-            self.qubits.append(other)
-        elif type(other) is Entanglement:
-            self.qubits += other.qubits
-        else:
-            raise TypeError
+    def display(self):
+        print(self.__repr__())
+        return self
