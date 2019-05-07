@@ -266,7 +266,6 @@ class Measurement(BaseGate):
     @staticmethod
     def apply(qubit):
         qubit.measure()
-        qubit.display()
 
     @staticmethod
     def reverse(qubit):

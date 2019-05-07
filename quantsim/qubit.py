@@ -1,5 +1,7 @@
 import numpy as np
-from .gates import *
+
+from .gates import (BaseGate, HGate, IGate, R8Gate, Rx, Rz, SGate, TGate,
+                    XGate, ZGate)
 
 __all__ = [
     'Qubit',
@@ -11,6 +13,7 @@ class Qubit:
     def __init__(self, a=1, b=0):
         self.zero = complex(a)
         self.one  = complex(b)
+        self.measured_state = None
 
     def __repr__(self):
         return str(self.zero) + '|0> + ' + str(self.one) + '|1>\n'
@@ -70,10 +73,12 @@ class Qubit:
         if np.random.rand() < abs(self.zero) ** 2:
             self.zero = complex(1)
             self.one  = complex(0)
+            self.measured_state = 0
 
         else:
             self.zero = complex(0)
             self.one  = complex(1)
+            self.measured_state = 1
 
         return self
     
