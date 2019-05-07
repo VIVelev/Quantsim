@@ -1,7 +1,7 @@
 import numpy as np
 
-from .gates import (BaseGate, HGate, IGate, R8Gate, Rx, Rz, SGate, TGate,
-                    XGate, ZGate)
+from .gates import (BaseGate, CNOTGate, HGate, IGate, R8Gate, Rx, Rz, SGate,
+                    TGate, XGate, ZGate)
 
 __all__ = [
     'Qubit',
@@ -91,22 +91,44 @@ class Entanglement:
         self.q1 = q1
         self.q2 = q2
         self.control_qubit = control_qubit
-
-    def __repr__(self):
-        prob = [
+        
+        self._bits = [
+            ['00', '01'],
+            ['10', '11']
+        ]
+        self._qubits_coef = [
             [self.q1.zero * self.q2.zero, self.q1.zero * self.q2.one],
             [self.q1.one * self.q2.zero, self.q1.one * self.q2.one]
         ]
 
-        return str(prob[0][0]) + '|00> + ' + str(prob[0][1]) + '|01> + ' + str(prob[1][0]) + '|10> + ' + str(prob[1][1]) + '|11>\n'
+    def __repr__(self):
+        string = ''
+
+        for i in range(2):
+            for j in range(2):
+                if self._qubits_coef[i][j] > 0:
+                    string += str(self._qubits_coef[i][j]) + '|' + self._bits[i][j] + '> +'
+
+        return string[:-2] + '\n'
 
     def __sub__(self, gate):
         assert isinstance(gate, BaseGate) 
 
-        gate.apply(
-            self.q1 if self.control_qubit else self.q2,
-            self.q1 if self.control_qubit else self.q2,
-        )
+        if isinstance(gate, CNOTGate):
+            if self.control_qubit == 0:
+                self._bits = [
+                    ['00', '01'],
+                    ['11', '10']
+                ]
+            else:
+                self._bits = [
+                    ['00', '11'],
+                    ['10', '01']
+                ]
+        
+        else:
+            pass
+
         return self
 
     def display(self):
