@@ -1,15 +1,19 @@
 # Quantsim
 Quantum Computing Simulation in Python 
 
-### Simple Random Qubit Generator program
+### Simple Random Bit Generator program
 ```python
-from quantsim import QuantumMachine
-from quantsim.gates import H, M
+from quantsim import Qubit, H, M
 
-with QuantumMachine(num_qubits=1) as qm:
-    qm.get_qubit() - H - M;
+def random_bit():
+    # Init a Qubit
+    q = Qubit()
 
-# => (1+0j)|0> + 0j|1>
+    # Apply Hadamard Gate
+    q - H - M
+    # q.H().measure() is equivalent
+
+    return q.measured_state
 ```
 
 ## Getting Started
