@@ -127,7 +127,7 @@ class Entanglement:
                 ]
         
         else:
-            pass
+            gate.apply(self)
 
         return self
 

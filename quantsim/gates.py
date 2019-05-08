@@ -24,6 +24,8 @@ __all__ = [
     'Rz',
     'Measurement',
     'M',
+    'Display',
+    'D',
 
     'CNOTGate',
     'CNOT',
@@ -272,6 +274,21 @@ class Measurement(BaseGate):
         pass
 
 M = Measurement()
+
+# ====================================================================================================
+
+class Display(BaseGate):
+    """Display"""
+
+    @staticmethod
+    def apply(qubit):
+        qubit.display()
+
+    @staticmethod
+    def reverse(qubit):
+        pass
+
+D = Display()
 
 # ====================================================================================================
 
