@@ -38,7 +38,7 @@ class Qubit:
         X.apply(self)
         return self
 
-    def hadamard(self):
+    def H(self):
         H.apply(self)
         return self
     
@@ -67,7 +67,7 @@ class Qubit:
         return self
 
     def measure(self):
-        """Measure the qubit in the computational basis"""
+        """ Measure the qubit in the computational basis """
 
         if np.random.rand() < abs(self.zero) ** 2:
             self.zero = complex(1)
@@ -84,6 +84,8 @@ class Qubit:
     def display(self):
         print(self.__repr__())
         return self
+
+# ====================================================================================================
 
 class Entanglement:
     def __init__(self, q1, q2, control_qubit=0):
@@ -133,3 +135,5 @@ class Entanglement:
     def display(self):
         print(self.__repr__())
         return self
+
+# ====================================================================================================

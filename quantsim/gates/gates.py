@@ -170,8 +170,14 @@ D = Display()
 
 # ====================================================================================================
 
-class CNOTGate():
-    pass
+class CNOTGate(SelfInverseGate):
+    """ Controlled Not (X) Gate """
+    
+    def __init__(self):
+        super().__init__('CNOT')
+
+    def apply(self, *qubits):
+        pass
 
 CNOT = CX = CNOTGate()
 
