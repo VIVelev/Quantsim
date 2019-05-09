@@ -1,7 +1,6 @@
 import numpy as np
 
-from .gates import (BaseGate, CNOTGate, HGate, IGate, R8Gate, Rx, Rz, SGate,
-                    TGate, XGate, ZGate)
+from .gates import CNOT, R8, BaseGate, H, I, Rx, Rz, S, T, X, Z
 
 __all__ = [
     'Qubit',
@@ -24,7 +23,7 @@ class Qubit:
     def __sub__(self, gate):
         assert isinstance(gate, BaseGate)
 
-        gate.apply(self)
+        gate(self)
         return self
 
     def __matmul__(self, other_qubit):
@@ -32,31 +31,31 @@ class Qubit:
         return Entanglement(self, other_qubit)
 
     def identity(self):
-        IGate.apply(self)
+        I.apply(self)
         return self
 
     def X(self):
-        XGate.apply(self)
+        X.apply(self)
         return self
 
     def hadamard(self):
-        HGate.apply(self)
+        H.apply(self)
         return self
     
     def Z(self):
-        ZGate.apply(self)
+        Z.apply(self)
         return self
 
     def S(self):
-        SGate.apply(self)
+        S.apply(self)
         return self
 
     def T(self):
-        TGate.apply(self)
+        T.apply(self)
         return self
     
     def R8(self):
-        R8Gate.apply(self)
+        R8.apply(self)
         return self
     
     def Rx(self, theta):
@@ -114,7 +113,7 @@ class Entanglement:
     def __sub__(self, gate):
         assert isinstance(gate, BaseGate) 
 
-        if isinstance(gate, CNOTGate):
+        if gate is CNOT:
             if self.control_qubit == 0:
                 self._bits = [
                     ['00', '01'],

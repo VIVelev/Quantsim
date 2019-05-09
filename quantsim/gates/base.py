@@ -26,7 +26,8 @@ class BaseGate(ABC):
         pass
 
     def __call__(self, *qubits):
-        self.apply(qubits)
+        self.apply(*qubits)
+        return self
 
     @abstractmethod
     def get_inverse(self):
@@ -64,10 +65,10 @@ class MatrixGate(BaseGate):
         qubits_matrix = [
             [q.zero, q.one] for q in qubits
         ]
-        qubits_matrix = np.linalg.transpose(qubits_matrix)
+        qubits_matrix = np.transpose(qubits_matrix)
 
         res_qubits_matrix = self.matrix @ qubits_matrix
-        res_qubits_matrix = np.linalg.transpose(res_qubits_matrix)
+        res_qubits_matrix = np.transpose(res_qubits_matrix)
 
         for i in range(len(qubits)):
             qubits[i].zero = res_qubits_matrix[i][0]
@@ -79,13 +80,14 @@ class MatrixGate(BaseGate):
 # ====================================================================================================
 
 class RotationGate(MatrixGate):
-    
+
     def __init__(self, name):
         super().__init__(np.identity(2), name)
         self._angle = 0
 
     def __call__(self, angle):
-        self._angle = angle    
+        self._angle = angle
+        return self  
 
     def __repr__(self):
         return self._name + '(theta)'
