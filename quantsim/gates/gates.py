@@ -1,6 +1,6 @@
 import numpy as np
 
-from .base import BaseGate, MatrixGate, SelfInverseGate
+from .base import MatrixGate, RotationGate, SelfInverseGate
 
 __all__ = [
     # Single Qubit Gates
@@ -21,7 +21,7 @@ __all__ = [
     'Display', 'D',
 
     # Multi Qubit Gates
-    'CNOTGate', 'CNOT',
+    'CNOTGate', 'CNOT', 'CX'
 ]
 
 
@@ -109,71 +109,34 @@ R8 = R8Gate()
 
 # ====================================================================================================
 
-class RxGate(BaseGate):
-    """Continuous Phase-flip Gate"""
+class RxGate(RotationGate):
+    """ Continuous Phase-flip Gate """
 
-    theta = 0
+    def __init__(self):
+        super().__init__('Rx')
 
-    def __call__(self, theta):
-        RxGate.theta = theta
-        return self
-    
-    @staticmethod
-    def get_matrix():
-        theta = RxGate.theta
+    @property
+    def matrix(self):
+        theta = self._angle
 
-        return np.array([
-            [np.cos(theta/2), -1j*np.sin(theta/2)],
-            [-1j*np.sin(theta/2), np.cos(theta/2)]
-        ])
-
-    @staticmethod
-    def apply(qubit):
-        vec = np.array([[qubit.zero],[qubit.one]])
-        vec = RxGate.get_matrix() @ vec
-
-        qubit.zero = vec[0][0]
-        qubit.one = vec[1][0]
-
-    @staticmethod
-    def reverse(qubit):
-        RxGate.theta = 360 - RxGate.theta
-        RxGate.apply(qubit)
+        return np.array([[np.cos(theta/2), -1j*np.sin(theta/2)],
+                        [-1j*np.sin(theta/2), np.cos(theta/2)]])
 
 Rx = RxGate()
 
 # ====================================================================================================
 
-class RzGate(BaseGate):
-    """Continuous Phase-flip Gate"""
+class RzGate(RotationGate):
+    """ Continuous Phase-flip Gate """
 
-    phi = 0
+    def __init__(self):
+        super().__init__('Rz')
 
-    def __call__(self, phi):
-        RzGate.phi = phi
-        return self
-    
-    @staticmethod
-    def get_matrix():
-        phi = RzGate.phi
+    @property
+    def matrix(self):
+        phi = self._angle
 
-        return np.array([
-            [1, 0],
-            [0, np.exp(1j*phi/2)]
-        ])
-
-    @staticmethod
-    def apply(qubit):
-        vec = np.array([[qubit.zero],[qubit.one]])
-        vec = RzGate.get_matrix() @ vec
-
-        qubit.zero = vec[0][0]
-        qubit.one = vec[1][0]
-
-    @staticmethod
-    def reverse(qubit):
-        RzGate.phi = 360 - RzGate.phi
-        RzGate.apply(qubit)
+        return np.array([[1, 0], [0, np.exp(1j*phi/2)]])
 
 Rz = RzGate()
 
@@ -210,6 +173,6 @@ D = Display()
 class CNOTGate():
     pass
 
-CNOT = CNOTGate()
+CNOT = CX = CNOTGate()
 
 # ====================================================================================================

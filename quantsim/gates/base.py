@@ -6,8 +6,8 @@ import numpy as np
 __all__ = [
     'BaseGate',
     'MatrixGate',
-    'SelfInverseGate',
     'RotationGate',
+    'SelfInverseGate',
 ]
 
 
@@ -78,23 +78,10 @@ class MatrixGate(BaseGate):
 
 # ====================================================================================================
 
-class SelfInverseGate(BaseGate):
-    """Self-inverse base gate class
-    
-    Automatic implementation of the get_inverse-member function for self-
-    inverse gates.
-    
-    """
-
-    def get_inverse(self):
-        return deepcopy(self)
-
-# ====================================================================================================
-
 class RotationGate(MatrixGate):
     
-    def __init__(self):
-        super().__init__(np.identity(2), 'RotationGate')
+    def __init__(self, name):
+        super().__init__(np.identity(2), name)
         self._angle = 0
 
     def __call__(self, angle):
@@ -106,5 +93,18 @@ class RotationGate(MatrixGate):
     @abstractproperty
     def matrix(self):
         pass
+
+# ====================================================================================================
+
+class SelfInverseGate(BaseGate):
+    """Self-inverse base gate class
+    
+    Automatic implementation of the get_inverse-member function for self-
+    inverse gates.
+    
+    """
+
+    def get_inverse(self):
+        return deepcopy(self)
 
 # ====================================================================================================
