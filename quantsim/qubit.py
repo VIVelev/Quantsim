@@ -1,10 +1,12 @@
+from itertools import product
+
 import numpy as np
 
 from .gates import CNOT, R8, BaseGate, H, I, Rx, Rz, S, T, X, Z
 
 __all__ = [
     'Qubit',
-    'Entanglement',
+    'ProductState',
 ]
 
 
@@ -28,7 +30,7 @@ class Qubit:
 
     def __matmul__(self, other_qubit):
         assert isinstance(other_qubit, Qubit)
-        return Entanglement(self, other_qubit)
+        return ProductState(self, other_qubit)
 
     def identity(self):
         I.apply(self)
@@ -87,50 +89,52 @@ class Qubit:
 
 # ====================================================================================================
 
-class Entanglement:
-    def __init__(self, q1, q2, control_qubit=0):
-        self.q1 = q1
-        self.q2 = q2
+class ProductState:
+    def __init__(self, *qubits, control_qubit=0):
+        self.qubits = qubits
         self.control_qubit = control_qubit
+
+        self._bits = None
+        self._coefs = None
+        self._init_tables()
         
-        self._bits = [
-            ['00', '01'],
-            ['10', '11']
-        ]
-        self._qubits_coef = [
-            [self.q1.zero * self.q2.zero, self.q1.zero * self.q2.one],
-            [self.q1.one * self.q2.zero, self.q1.one * self.q2.one]
-        ]
+    def _init_tables(self):
+        self._bits = list(product([0, 1], repeat=len(self.qubits)))
+        self._coefs = []
+
+        for config in self._bits:
+            coef = 1
+
+            for i, bit in enumerate(config):
+                if bit == 0:
+                    coef *= self.qubits[i].zero
+                else:
+                    coef *= self.qubits[i].one
+            
+            self._coefs.append(coef)
+
+    def __matmul__(self, other):
+        assert isinstance(other, Qubit) or isinstance(other, ProductState)
+
+        if isinstance(other, Qubit):
+            self.qubits.append(other)
+        else:
+            self.qubits += other.qubits
+
+        self._init_tables()
 
     def __repr__(self):
         string = ''
 
-        for i in range(2):
-            for j in range(2):
-                if self._qubits_coef[i][j] > 0:
-                    string += str(self._qubits_coef[i][j]) + '|' + self._bits[i][j] + '> +'
+        for config, coef in zip(self._bits, self._coefs):
+            if coef**2 != 0:
+                string += str(coef) + '|' + ''.join(map(str, config)) + '> +'
 
         return string[:-2] + '\n'
 
     def __sub__(self, gate):
         assert isinstance(gate, BaseGate) 
-
-        if gate is CNOT:
-            if self.control_qubit == 0:
-                self._bits = [
-                    ['00', '01'],
-                    ['11', '10']
-                ]
-            else:
-                self._bits = [
-                    ['00', '11'],
-                    ['10', '01']
-                ]
-        
-        else:
-            gate.apply(self)
-
-        return self
+        pass
 
     def display(self):
         print(self.__repr__())

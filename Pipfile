@@ -10,6 +10,7 @@ jupyter = "*"
 [packages]
 numpy = "*"
 matplotlib = "*"
+sympy = "*"
 
 [requires]
 python_version = "3.7"
