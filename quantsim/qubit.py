@@ -11,9 +11,10 @@ __all__ = [
 
 
 class Qubit:
-    def __init__(self, a=1, b=0):
-        self.zero = complex(a)
-        self.one  = complex(b)
+
+    def __init__(self, zero=1, one=0):
+        self.zero = complex(zero)
+        self.one  = complex(one)
         self.measured_state = None
 
     def __repr__(self):
@@ -90,6 +91,7 @@ class Qubit:
 # ====================================================================================================
 
 class ProductState:
+
     def __init__(self, *qubits):
         self.qubits = qubits
 
