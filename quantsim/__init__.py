@@ -1,6 +1,6 @@
 from . import gates
 from .gates import *
-from .main import QuantumMachine
+from .machine import QuantumMachine
 from .qubit import Qubit, ProductState
 from .states import ket
 
