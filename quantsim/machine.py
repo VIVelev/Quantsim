@@ -11,24 +11,20 @@ class QuantumMachine:
         self.num_qubits = num_qubits
         self.name = name
 
-        self.qubits = []
+        self._qubits = []
 
+    def __getitem__(self, idx):
+        return self._qubits[idx-1]
+
+    def __setitem__(self, idx, data):
+        self._qubits[idx-1] = data
+    
     def __enter__(self):
         self._init_qubits()
         return self
 
     def __exit__(self, exception_type, exception_value, traceback):
-        del self.qubits
+        del self._qubits
 
     def _init_qubits(self):
-        self.qubits = [Qubit() for _ in range(self.num_qubits)]
-
-    def get_qubit(self, idx=None):
-        if idx != None:
-            return self.qubits[idx]
-        else:
-            return self.qubits[self.num_qubits-1]
-
-    def set_qubit(self, idx, qubit):
-        self.qubits[idx] = qubit
-        return qubit
+        self._qubits = [Qubit() for _ in range(self.num_qubits)]
