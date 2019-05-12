@@ -13,6 +13,11 @@ __all__ = [
 
 class BaseGate(ABC):
     """Base class of all gates. (Don't use it directly but derive from it)
+
+    Parameters:
+    -----------
+    name : string
+
     """
 
     def __init__(self, name):
@@ -40,13 +45,14 @@ class BaseGate(ABC):
 
 class MatrixGate(BaseGate):
     """Matrix Qubit Gate
-    
+
     Defines a gate class whose instances are defined by a matrix.
-    
+
     Parameters:
     -----------
     matrix : 2d array
-    
+    name : string
+
     """
     
     def __init__(self, matrix, name):
@@ -80,6 +86,18 @@ class MatrixGate(BaseGate):
 # ====================================================================================================
 
 class RotationGate(MatrixGate):
+    """Defines a base class of a rotation gate.
+
+    A rotation gate has a continuous parameter (the angle), labeled 'angle' /
+    self.angle.
+
+    Parameters:
+    -----------
+    matrix : 2d array
+    name : string
+    angle : float, angle
+
+    """
 
     def __init__(self, name):
         super().__init__(np.identity(2), name)
@@ -100,10 +118,14 @@ class RotationGate(MatrixGate):
 
 class SelfInverseGate(BaseGate):
     """Self-inverse base gate class
-    
+
     Automatic implementation of the get_inverse-member function for self-
     inverse gates.
-    
+
+    Parameters:
+    -----------
+    name : string
+
     """
 
     def get_inverse(self):
