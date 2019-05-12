@@ -30,16 +30,12 @@ class BaseGate(ABC):
     def apply(self, *qubits):
         pass
 
-    def __call__(self, *qubits):
-        self.apply(*qubits)
-        return self
-
     @abstractmethod
     def get_inverse(self):
         pass
 
     def inverse(self, *qubits):
-        self.get_inverse().apply(qubits)
+        self.get_inverse().apply(*qubits)
 
 # ====================================================================================================
 
@@ -105,7 +101,7 @@ class RotationGate(MatrixGate):
 
     def __call__(self, angle):
         self._angle = angle
-        return self  
+        return self
 
     def __repr__(self):
         return self._name + '(theta)'

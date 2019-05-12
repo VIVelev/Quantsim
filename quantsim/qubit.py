@@ -25,7 +25,7 @@ class Qubit:
     def __sub__(self, gate):
         assert isinstance(gate, BaseGate)
 
-        gate(self)
+        gate.apply(self)
         return self
 
     def __matmul__(self, other_qubit):
@@ -95,9 +95,9 @@ class ProductState:
 
         self._bits = None
         self._coefs = None
-        self._init_tables()
+        self._calc_states()
 
-    def _init_tables(self):
+    def _calc_states(self):
         self._bits = list(map(list, product([0, 1], repeat=len(self.qubits))))
         self._coefs = []
 
@@ -120,7 +120,7 @@ class ProductState:
         else:
             self.qubits += other.qubits
 
-        self._init_tables()
+        self._calc_states()
 
     def __repr__(self):
         string = ''
