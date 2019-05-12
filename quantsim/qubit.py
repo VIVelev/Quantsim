@@ -90,16 +90,15 @@ class Qubit:
 # ====================================================================================================
 
 class ProductState:
-    def __init__(self, *qubits, control_qubit=0):
+    def __init__(self, *qubits):
         self.qubits = qubits
-        self.control_qubit = control_qubit
 
         self._bits = None
         self._coefs = None
         self._init_tables()
-        
+
     def _init_tables(self):
-        self._bits = list(product([0, 1], repeat=len(self.qubits)))
+        self._bits = list(map(list, product([0, 1], repeat=len(self.qubits))))
         self._coefs = []
 
         for config in self._bits:
@@ -134,7 +133,13 @@ class ProductState:
 
     def __sub__(self, gate):
         assert isinstance(gate, BaseGate) 
-        pass
+        
+        if gate is CNOT:
+            gate.apply(self._bits)
+        else:
+            gate.apply(self)
+
+        return self
 
     def display(self):
         print(self.__repr__())

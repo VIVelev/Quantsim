@@ -175,9 +175,18 @@ class CNOTGate(SelfInverseGate):
     
     def __init__(self):
         super().__init__('CNOT')
+        self._control = 0
+        self._target = 1
 
-    def apply(self, *qubits):
-        pass
+    def __call__(self, control, target):
+        self._control = control-1
+        self._target = target-1
+        return self
+
+    def apply(self, bits):
+        for i in range(len(bits)):
+            if bits[i][self._control] == 1:
+                bits[i][self._target] = int(not bits[i][self._target])
 
 CNOT = CX = CNOTGate()
 
