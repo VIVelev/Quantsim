@@ -1,13 +1,13 @@
 from .qubit import Qubit, ProductState
 
 __all__ = [
-    'QuantumMachine',
+    'QuantumCircuit',
 ]
 
 
-class QuantumMachine:
+class QuantumCircuit:
     
-    def __init__(self, num_qubits=2, name='My-Quantum-Machine'):
+    def __init__(self, num_qubits=2, name='My-Quantum-Circuit'):
         self.num_qubits = num_qubits
         self.name = name
 

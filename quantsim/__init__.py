@@ -1,13 +1,13 @@
 from . import gates
 from .gates import *
-from .machine import QuantumMachine
-from .qubit import Qubit, ProductState
+from .circuit import QuantumCircuit
+from .qubit import ProductState, Qubit
 from .states import ket
 
 __all__ = [
     *gates.__all__,
-    'QuantumMachine',
-    'Qubit',
+    'QuantumCircuit',
     'ProductState',
+    'Qubit',
     'ket',
 ]
