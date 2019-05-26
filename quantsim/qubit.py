@@ -12,9 +12,12 @@ __all__ = [
 
 class Qubit:
 
-    def __init__(self, zero=1, one=0):
+    def __init__(self, zero=1, one=0, circuit=None, qid=None):
         self.zero = complex(zero)
         self.one  = complex(one)
+        self.circuit = circuit
+        self.qid = qid
+
         self.measured_state = None
 
     def __repr__(self):

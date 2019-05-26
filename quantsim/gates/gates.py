@@ -149,6 +149,8 @@ class Measurement(SelfInverseGate):
         super().__init__('M')
 
     def apply(self, *qubits):
+        super().apply(*qubits)
+
         for qubit in qubits:
             qubit.measure()
 
@@ -163,6 +165,8 @@ class Display(SelfInverseGate):
         super().__init__('D')
 
     def apply(self, *qubits):
+        super().apply(*qubits)
+
         for qubit in qubits:
             qubit.display()
 
@@ -184,6 +188,8 @@ class CNOTGate(SelfInverseGate):
         return self
 
     def apply(self, bits):
+        super().apply(*bits)
+
         for i in range(len(bits)):
             if bits[i][self._control] == 1:
                 bits[i][self._target] = int(not bits[i][self._target])

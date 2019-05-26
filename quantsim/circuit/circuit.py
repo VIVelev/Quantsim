@@ -1,4 +1,4 @@
-from .qubit import Qubit, ProductState
+from ..qubit import Qubit, ProductState
 
 __all__ = [
     'QuantumCircuit',
@@ -11,8 +11,10 @@ class QuantumCircuit:
         self.num_qubits = num_qubits
         self.name = name
 
+        self.qasm = []
+
         # Init Qubits
-        qubits = [Qubit() for _ in range(self.num_qubits)]
+        qubits = [Qubit(circuit=self, qid=i) for i in range(self.num_qubits)]
         # Init The Overall Product State
         self._product_state = ProductState(*qubits)
 
@@ -27,3 +29,6 @@ class QuantumCircuit:
 
     def __exit__(self, exception_type, exception_value, traceback):
         del self._product_state
+
+    def display(self):
+        pass

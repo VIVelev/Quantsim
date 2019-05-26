@@ -26,9 +26,9 @@ class BaseGate(ABC):
     def __repr__(self):
         return self._name
 
-    @abstractmethod
     def apply(self, *qubits):
-        pass
+        for qubit in qubits:
+            qubit.circuit.qasm.append(f'{self} q_{qubit.qid}')
 
     @abstractmethod
     def get_inverse(self):
@@ -64,6 +64,8 @@ class MatrixGate(BaseGate):
         self._matrix = np.array(matrix)
     
     def apply(self, *qubits):
+        super().apply(*qubits)
+
         qubits_matrix = [
             [q.zero, q.one] for q in qubits
         ]
