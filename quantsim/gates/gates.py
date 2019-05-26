@@ -148,11 +148,9 @@ class Measurement(SelfInverseGate):
     def __init__(self):
         super().__init__('M')
 
-    def apply(self, *qubits):
-        super().apply(*qubits)
-
-        for qubit in qubits:
-            qubit.measure()
+    def apply(self, qubit):
+        super().apply(qubit)
+        qubit.measure()
 
 M = Measurement()
 
@@ -164,11 +162,9 @@ class Display(SelfInverseGate):
     def __init__(self):
         super().__init__('D')
 
-    def apply(self, *qubits):
-        super().apply(*qubits)
-
-        for qubit in qubits:
-            qubit.display()
+    def apply(self, qubit):
+        super().apply(qubit)
+        qubit.display()
 
 D = Display()
 
@@ -182,17 +178,17 @@ class CNOTGate(SelfInverseGate):
         self._control = 0
         self._target = 1
 
-    def __call__(self, control, target):
-        self._control = control-1
-        self._target = target-1
-        return self
+    # def __call__(self, control=0, target=1):
+    #     self._control = control
+    #     self._target = target
+    #     return self
 
-    def apply(self, bits):
-        super().apply(*bits)
+    def apply(self, prodstate):
+        super().apply(*prodstate.qubits)
 
-        for i in range(len(bits)):
-            if bits[i][self._control] == 1:
-                bits[i][self._target] = int(not bits[i][self._target])
+        for i in range(len(prodstate._bits)):
+            if prodstate._bits[i][self._control] == 1:
+                prodstate._bits[i][self._target] = int(not prodstate._bits[i][self._target])
 
 CNOT = CX = CNOTGate()
 

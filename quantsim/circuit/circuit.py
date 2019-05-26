@@ -1,4 +1,6 @@
-from ..qubit import Qubit, ProductState
+from sympy.physics.quantum.qasm import Qasm
+
+from ..qubit import ProductState, Qubit
 
 __all__ = [
     'QuantumCircuit',
@@ -12,17 +14,27 @@ class QuantumCircuit:
         self.name = name
 
         self.qasm = []
+        qubits = []
 
-        # Init Qubits
-        qubits = [Qubit(circuit=self, qid=i) for i in range(self.num_qubits)]
-        # Init The Overall Product State
+        for i in range(num_qubits):
+            self.qasm.append(f'qubit q_{i}')
+            qubits.append(Qubit(circuit=self, qid=i))
+
+        # Define custom gates
+        self.qasm.append("def R8,0,'R8'")
+        self.qasm.append("def Rx,0,'Rx'")
+        self.qasm.append("def Rz,0,'Rz'")
+        self.qasm.append("def M,0,'M'")
+        self.qasm.append("def D,0,'D'")
+
+        # Init the overall product state
         self._product_state = ProductState(*qubits)
 
     def __getitem__(self, idx):
-        return self._product_state.qubits[idx-1]
+        return self._product_state.qubits[idx]
 
     def __setitem__(self, idx, data):
-        self._product_state.qubits[idx-1] = data
+        self._product_state.qubits[idx] = data
     
     def __enter__(self):
         return self
@@ -31,4 +43,5 @@ class QuantumCircuit:
         del self._product_state
 
     def display(self):
-        pass
+        print(self.qasm)
+        Qasm(*self.qasm).plot()

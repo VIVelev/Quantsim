@@ -137,13 +137,9 @@ class ProductState:
         return string[:-2] + '\n'
 
     def __sub__(self, gate):
-        assert isinstance(gate, BaseGate) 
-        
-        if gate is CNOT:
-            gate.apply(self._bits)
-        else:
-            gate.apply(self)
+        assert isinstance(gate, BaseGate)
 
+        gate.apply(self)
         return self
 
     def display(self):
